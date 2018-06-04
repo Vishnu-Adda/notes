@@ -1,6 +1,8 @@
 package com.someapp.vishnu.mynotesapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +59,29 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences(
                 "com.someapp.vishnu.mynotesapp", Context.MODE_PRIVATE);
 
-        notes = new ArrayList<String>();
+        String test = sharedPreferences.getString("text","test");
+
+        if(test == "test") {
+
+            notes = new ArrayList<String>();
+
+        } else {
+
+            try {
+                notes = (ArrayList<String>) ObjectSerializer
+                        .deserialize(sharedPreferences
+                                .getString("text",
+                                        ObjectSerializer
+                                                .serialize(new ArrayList<String>())));
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+            }
+        }
+
+
 
         ListView listView = findViewById(R.id.notesListView);
 
@@ -70,11 +94,48 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
-                intent.putExtra("note", position);
+                intent.putExtra("text", position);
 
                 startActivity(intent);
 
             }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Delete this Note?")
+                        .setMessage("Cannot be retrieved again")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                notes.remove(position);
+                                arrayAdapter.notifyDataSetChanged();
+
+                                try {
+
+                                    sharedPreferences.edit().putString("text", ObjectSerializer
+                                            .serialize(notes)).apply();
+
+                                } catch (Exception e) {
+
+                                    e.printStackTrace();
+
+                                }
+
+                                Toast.makeText(getApplicationContext(),
+                                        "Note Deleted", Toast.LENGTH_SHORT).show();
+                            }
+                        } )
+                        .setNegativeButton("No", null)
+                        .show();
+
+                return true;
+            }
+
         });
 
     }
