@@ -24,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
     static ArrayList<String> notes = new ArrayList<String>();
     static ArrayAdapter arrayAdapter;
 
+    /**
+     * Inflating the expandable ellipses
+     * @param menu
+     *  menu returned when tapped
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -33,10 +39,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * When an item in the menu is clicked
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
+//        Opens up the note activity
         switch (item.getItemId()) {
             case R.id.addNote:
                 Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
@@ -51,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initialize adapter for ListView, and bring up stored notes
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setAdapter(arrayAdapter);
 
+//        Open up the note when clicked in the ListView
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -101,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        Event handler for long clicks, prompting user to delete note
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
