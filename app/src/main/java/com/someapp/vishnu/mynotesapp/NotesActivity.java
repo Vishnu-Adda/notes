@@ -9,12 +9,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * NotesActivity that is prompted for edits and creation
+ */
 public class NotesActivity extends AppCompatActivity {
 
     EditText editText;
     boolean justAdded;
     int position;
 
+    /**
+     * Write text to the Activity if there was text stored
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +45,7 @@ public class NotesActivity extends AppCompatActivity {
 
     }
 
+//  When the save button is clicked, save note and add to ArrayList plus SharedPreferences
     public void onClick(View view) {
 
         if (justAdded) {
