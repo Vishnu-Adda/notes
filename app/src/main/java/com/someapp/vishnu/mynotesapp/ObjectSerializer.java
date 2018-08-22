@@ -7,10 +7,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-
+/**
+ * Object Serializer to help store complex structures as strings for SharedPreferences... not my
+ * creation
+ */
 public class ObjectSerializer {
 
-
+    /**
+     * Serialize the given object to an encoded string
+     * @param obj
+     * @return
+     * @throws IOException
+     */
     public static String serialize(Serializable obj) throws IOException {
         if (obj == null) return "";
         try {
@@ -24,6 +32,12 @@ public class ObjectSerializer {
         }
     }
 
+    /**
+     * Deserialize the given object after decoding the string
+     * @param str
+     * @return
+     * @throws IOException
+     */
     public static Object deserialize(String str) throws IOException {
         if (str == null || str.length() == 0) return null;
         try {
@@ -35,6 +49,11 @@ public class ObjectSerializer {
         }
     }
 
+    /**
+     * Encode the given bytes array to a string
+     * @param bytes
+     * @return
+     */
     public static String encodeBytes(byte[] bytes) {
         StringBuffer strBuf = new StringBuffer();
 
@@ -46,6 +65,11 @@ public class ObjectSerializer {
         return strBuf.toString();
     }
 
+    /**
+     * Decode the string to a byte[]
+     * @param str
+     * @return
+     */
     public static byte[] decodeBytes(String str) {
         byte[] bytes = new byte[str.length() / 2];
         for (int i = 0; i < str.length(); i+=2) {
